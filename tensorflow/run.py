@@ -130,7 +130,8 @@ def prepare(args):
                                                                             vocab.size()))
 
     logger.info('Assigning embeddings...')
-    vocab.randomly_init_embeddings(args.embed_size)
+    # vocab.randomly_init_embeddings(args.embed_size)
+    vocab.load_pretrained_embeddings("/home/zhouchengyu/chinese_embedding/Tencent_AILab_ChineseEmbedding.txt")
 
     logger.info('Saving vocab...')
     with open(os.path.join(args.vocab_dir, 'vocab.data'), 'wb') as fout:

@@ -145,15 +145,20 @@ class Vocab(object):
             embedding_path: the path of the pretrained embedding file
         """
         trained_embeddings = {}
+        value_error_num = 0
         with open(embedding_path, 'r') as fin:
             for line in fin:
                 contents = line.strip().split()
-                token = contents[0].decode('utf8')
+                token = contents[0]
                 if token not in self.token2id:
                     continue
-                trained_embeddings[token] = list(map(float, contents[1:]))
-                if self.embed_dim is None:
-                    self.embed_dim = len(contents) - 1
+                try:
+                    trained_embeddings[token] = list(map(float, contents[1:]))
+                except ValueError:
+                    value_error_num += 1
+        print("value error num: {}".format(value_error_num))
+        if self.embed_dim is None:
+            self.embed_dim = len(contents) - 1
         filtered_tokens = trained_embeddings.keys()
         # rebuild the token x id map
         self.token2id = {}
